@@ -76,7 +76,7 @@ const setOverflowHidden = (options?: BodyScrollOptions) => {
     const scrollBarGap = window.innerWidth - document.documentElement.clientWidth;
 
     if (reserveScrollBarGap && scrollBarGap > 0) {
-      const computedBodyPaddingRight = parseInt(getComputedStyle(document.body).getPropertyValue('padding-right'), 10);
+      const computedBodyPaddingRight = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'), 10);
       previousBodyPaddingRight = document.body.style.paddingRight;
       document.body.style.paddingRight = `${computedBodyPaddingRight + scrollBarGap}px`;
     }
@@ -132,7 +132,7 @@ const handleScroll = (event: HandleScrollEvent, targetElement: any): boolean => 
   return true;
 };
 
-export const disableBodyScroll = (targetElement: any, options?: BodyScrollOptions): void => {
+export const disableBodyScroll = (targetElement: any, options?: BodyScrollOptions = {}): void => {
   // targetElement must be provided
   if (!targetElement) {
     // eslint-disable-next-line no-console
@@ -154,7 +154,7 @@ export const disableBodyScroll = (targetElement: any, options?: BodyScrollOption
 
   locks = [...locks, lock];
 
-  if (!isIosDevice || options.hideBodyOverflow) {
+  if (!isIosDevice ||options.hideBodyOverflow) {
     setOverflowHidden(options);
   }
 
@@ -216,7 +216,7 @@ export const enableBodyScroll = (targetElement: any): void => {
     return;
   }
 
-  const isBodyOverflowHidden = !isIosDevice || !!locks.find(lock => lock.options.hideBodyOverflow);
+  const isBodyOverflowHidden = !isIosDevice ||!!locks.find(lock => lock.options.hideBodyOverflow);
   locks = locks.filter(lock => lock.targetElement !== targetElement);
 
   if (isIosDevice) {
